@@ -72,7 +72,7 @@
         </div>
         <p class="subheadline">The largest investors in OpenAI have changed notably over the last two years as the ChatGPT maker has raised increasingly huge funding rounds.</p>
         <div class="chart-area" id="chart"></div>
-        <p class="source">* Company has a revenue-sharing arrangement with OpenAI. ^Estimated valuation. Note: Valuations include investments.<br>Chart: Shane Burke • Source: The Information reporting</p>
+        <p class="source">* Company has a revenue-sharing arrangement with OpenAI. ^ Estimated. Note: Valuations include investments.<br>Chart: Shane Burke • Source: The Information reporting</p>
     </div>
 
     <script>
@@ -277,11 +277,11 @@
             // Calculate label positions and widths, then resolve collisions
             var labels = data.map(function(d, i) {
                 var idealX = xTime(d.ts);
-                // Estimate label width based on text length
-                var leadWidth = d.lead.length * (mob ? 6 : 7);
-                var othersWidth = d.others ? d.others.length * (mob ? 5 : 5.5) : 0;
-                var dateWidth = d.date.length * (mob ? 5 : 6);
-                var width = Math.max(leadWidth, othersWidth, dateWidth) + (mob ? 10 : 15);
+                // Estimate label width based on text length - smaller on mobile
+                var leadWidth = d.lead.length * (mob ? 5 : 7);
+                var othersWidth = d.others ? d.others.length * (mob ? 4 : 5.5) : 0;
+                var dateWidth = d.date.length * (mob ? 4 : 6);
+                var width = Math.max(leadWidth, othersWidth, dateWidth) + (mob ? 8 : 15);
                 return { 
                     i: i, 
                     idealX: idealX, 
@@ -292,7 +292,7 @@
             });
             
             // Resolve collisions by nudging overlapping labels - bias right labels toward their points
-            var minGap = mob ? 5 : 8;
+            var minGap = mob ? 8 : 8;
             for (var pass = 0; pass < 10; pass++) {
                 var moved = false;
                 for (var i = 1; i < labels.length; i++) {
@@ -376,7 +376,7 @@
                 var dt = el('text');
                 dt.setAttribute('x', textX); dt.setAttribute('y', lblY);
                 dt.setAttribute('text-anchor', anchor);
-                dt.setAttribute('font-size', mob ? '10px' : '11px');
+                dt.setAttribute('font-size', mob ? '8px' : '11px');
                 dt.setAttribute('fill', '#666');
                 dt.textContent = d.date;
                 g.appendChild(dt);
@@ -387,18 +387,18 @@
                     d.leads.forEach(function(leadName, idx) {
                         var lt = el('text');
                         lt.setAttribute('x', textX); 
-                        lt.setAttribute('y', lblY + (mob ? 12 : 14) + idx * (mob ? 9 : 11));
+                        lt.setAttribute('y', lblY + (mob ? 10 : 14) + idx * (mob ? 8 : 11));
                         lt.setAttribute('text-anchor', anchor);
-                        lt.setAttribute('font-size', mob ? '8px' : '10px');
+                        lt.setAttribute('font-size', mob ? '7px' : '10px');
                         lt.setAttribute('font-weight', '600');
                         lt.textContent = leadName;
                         g.appendChild(lt);
                     });
                 } else {
                     var lt = el('text');
-                    lt.setAttribute('x', textX); lt.setAttribute('y', lblY + (mob ? 12 : 14));
+                    lt.setAttribute('x', textX); lt.setAttribute('y', lblY + (mob ? 10 : 14));
                     lt.setAttribute('text-anchor', anchor);
-                    lt.setAttribute('font-size', mob ? '11px' : '13px');
+                    lt.setAttribute('font-size', mob ? '9px' : '13px');
                     lt.setAttribute('font-weight', '600');
                     lt.textContent = d.lead;
                     g.appendChild(lt);
@@ -406,9 +406,9 @@
 
                 if (d.others) {
                     var ot = el('text');
-                    ot.setAttribute('x', textX); ot.setAttribute('y', lblY + (mob ? 23 : 27));
+                    ot.setAttribute('x', textX); ot.setAttribute('y', lblY + (mob ? 19 : 27));
                     ot.setAttribute('text-anchor', anchor);
-                    ot.setAttribute('font-size', mob ? '9px' : '10px');
+                    ot.setAttribute('font-size', mob ? '7px' : '10px');
                     ot.setAttribute('fill', '#888');
                     ot.textContent = d.others;
                     g.appendChild(ot);
