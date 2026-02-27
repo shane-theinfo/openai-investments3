@@ -72,17 +72,17 @@
         </div>
         <p class="subheadline">The largest investors in OpenAI have changed notably over the last two years as the ChatGPT maker has raised increasingly huge funding rounds.</p>
         <div class="chart-area" id="chart"></div>
-        <p class="source">* Company has a revenue-sharing arrangement with OpenAI. • Note: Valuations include investments.<br>Chart: Shane Burke • Source: The Information reporting</p>
+        <p class="source">* Company has a revenue-sharing arrangement with OpenAI. ^ Estimated. Note: Valuations include investments.<br>Chart: Shane Burke • Source: The Information reporting</p>
     </div>
 
     <script>
         var data = [
-            { date: 'Jul 2019', ts: new Date(2019, 6, 1).getTime(), lead: 'Microsoft*', others: 'Khosla, YC, Hoffman', amt: 1, val: null },
-            { date: 'Oct 2021', ts: new Date(2021, 9, 1).getTime(), lead: 'Microsoft*', others: null, amt: 2, val: null },
-            { date: 'Jan 2023', ts: new Date(2023, 0, 1).getTime(), lead: 'Microsoft*', others: null, amt: 10, val: 29 },
-            { date: 'Oct 2024', ts: new Date(2024, 9, 1).getTime(), lead: 'Thrive', others: 'Microsoft', amt: 6.6, val: 157 },
-            { date: 'Aug 2025', ts: new Date(2025, 7, 1).getTime(), lead: 'SoftBank', others: 'Sequoia +4', amt: 41, val: 300 },
-            { date: 'Feb 2026', ts: new Date(2026, 1, 1).getTime(), lead: 'SoftBank', others: 'Amazon, Nvidia', amt: 100, val: 830 }
+            { date: '2019', ts: new Date(2019, 6, 1).getTime(), lead: 'Microsoft*', others: 'Khosla, YC, Hoffman', amt: 1, val: null },
+            { date: '2021', ts: new Date(2021, 9, 1).getTime(), lead: 'Microsoft*', others: null, amt: 2, val: null },
+            { date: '2023', ts: new Date(2023, 0, 1).getTime(), lead: 'Microsoft*^', others: null, amt: 10, val: 29 },
+            { date: '2024', ts: new Date(2024, 9, 1).getTime(), lead: 'Thrive', others: 'Microsoft', amt: 6.6, val: 157 },
+            { date: '2025', ts: new Date(2025, 7, 1).getTime(), lead: 'SoftBank', others: 'Sequoia +4', amt: 41, val: 300 },
+            { date: '2026', ts: new Date(2026, 1, 1).getTime(), lead: 'SoftBank', leads: ['SoftBank', 'Amazon', 'Nvidia'], others: null, amt: 100, val: 830 }
         ];
         
         var yearTicks = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026].map(function(y) {
@@ -119,7 +119,7 @@
 
             // Heights
             var valH = mob ? 140 : 170;
-            var lblH = mob ? 60 : 70;
+            var lblH = mob ? 70 : 80;
             var maxRows = Math.ceil(100 / cols);
             var blkH = maxRows * (sz + gap) + 35;
             var H = valH + lblH + blkH + 10;
@@ -381,13 +381,28 @@
                 dt.textContent = d.date;
                 g.appendChild(dt);
 
-                var lt = el('text');
-                lt.setAttribute('x', textX); lt.setAttribute('y', lblY + (mob ? 12 : 14));
-                lt.setAttribute('text-anchor', anchor);
-                lt.setAttribute('font-size', mob ? '11px' : '13px');
-                lt.setAttribute('font-weight', '600');
-                lt.textContent = d.lead;
-                g.appendChild(lt);
+                // Handle multiple leads (2026) or single lead
+                if (d.leads) {
+                    // Multiple leads - stack vertically with smaller font
+                    d.leads.forEach(function(leadName, idx) {
+                        var lt = el('text');
+                        lt.setAttribute('x', textX); 
+                        lt.setAttribute('y', lblY + (mob ? 12 : 14) + idx * (mob ? 9 : 11));
+                        lt.setAttribute('text-anchor', anchor);
+                        lt.setAttribute('font-size', mob ? '8px' : '10px');
+                        lt.setAttribute('font-weight', '600');
+                        lt.textContent = leadName;
+                        g.appendChild(lt);
+                    });
+                } else {
+                    var lt = el('text');
+                    lt.setAttribute('x', textX); lt.setAttribute('y', lblY + (mob ? 12 : 14));
+                    lt.setAttribute('text-anchor', anchor);
+                    lt.setAttribute('font-size', mob ? '11px' : '13px');
+                    lt.setAttribute('font-weight', '600');
+                    lt.textContent = d.lead;
+                    g.appendChild(lt);
+                }
 
                 if (d.others) {
                     var ot = el('text');
